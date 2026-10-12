@@ -1,0 +1,17 @@
+flowchart TD
+    A([Start: korisnik, tip razdoblja, prozor, createIfMissing]) --> B[Dohvati zapise kuhanja u prozoru iz baze]
+    B --> C[Dohvati postojeći izvještaj za to razdoblje]
+    C --> D{Ima li zapisa u prozoru?}
+
+    D -- Ne --> E{Postoji li izvještaj?}
+    E -- Da --> F[Obriši izvještaj]
+    E -- Ne --> G[Ništa]
+    F --> Z([Kraj: prazno])
+    G --> Z
+
+    D -- Da --> H{Izvještaj ne postoji I createIfMissing = false?}
+    H -- Da --> I[Preskoči - ne stvaraj prijevremeno]
+    I --> Z
+    H -- Ne --> J[Izračunaj sve pokazatelje: broj, prosj. ocjena, doza, top zrno, metoda, 3 serije]
+    J --> K[Stvori ili ažuriraj izvještaj i spremi u bazu]
+    K --> L([Kraj: vraćen spremljeni izvještaj])

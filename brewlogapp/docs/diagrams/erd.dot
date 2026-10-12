@@ -1,0 +1,133 @@
+digraph ERD {
+  graph [rankdir=TB, bgcolor=white, splines=spline, nodesep=0.7, ranksep=1.1, dpi=200];
+  node  [shape=plaintext, fontname="Helvetica", fontsize=12];
+  edge  [color="#37474f", fontname="Helvetica", fontsize=11, fontcolor="#37474f",
+         dir=both, penwidth=1.1];
+
+  // ---------- ENTITETI ----------
+  User [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" COLOR="#37474f">
+      <TR><TD BGCOLOR="#cfd8dc" COLSPAN="3"><B>User</B></TD></TR>
+      <TR><TD ALIGN="LEFT">Long</TD><TD ALIGN="LEFT">id</TD><TD>PK</TD></TR>
+      <TR><TD ALIGN="LEFT">String</TD><TD ALIGN="LEFT">username</TD><TD></TD></TR>
+      <TR><TD ALIGN="LEFT">String</TD><TD ALIGN="LEFT">password</TD><TD></TD></TR>
+      <TR><TD ALIGN="LEFT">String</TD><TD ALIGN="LEFT">email</TD><TD></TD></TR>
+      <TR><TD ALIGN="LEFT">Role</TD><TD ALIGN="LEFT">role</TD><TD>enum</TD></TR>
+      <TR><TD ALIGN="LEFT">String</TD><TD ALIGN="LEFT">googleId</TD><TD></TD></TR>
+      <TR><TD ALIGN="LEFT">String</TD><TD ALIGN="LEFT">displayName</TD><TD></TD></TR>
+      <TR><TD ALIGN="LEFT">String</TD><TD ALIGN="LEFT">firstName</TD><TD></TD></TR>
+      <TR><TD ALIGN="LEFT">String</TD><TD ALIGN="LEFT">lastName</TD><TD></TD></TR>
+      <TR><TD ALIGN="LEFT">boolean</TD><TD ALIGN="LEFT">active</TD><TD></TD></TR>
+      <TR><TD ALIGN="LEFT">LocalDateTime</TD><TD ALIGN="LEFT">createdAt</TD><TD></TD></TR>
+    </TABLE>>];
+
+  CoffeeBean [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" COLOR="#37474f">
+      <TR><TD BGCOLOR="#cfd8dc" COLSPAN="3"><B>CoffeeBean</B></TD></TR>
+      <TR><TD ALIGN="LEFT">Long</TD><TD ALIGN="LEFT">id</TD><TD>PK</TD></TR>
+      <TR><TD ALIGN="LEFT">String</TD><TD ALIGN="LEFT">name</TD><TD></TD></TR>
+      <TR><TD ALIGN="LEFT">String</TD><TD ALIGN="LEFT">origin</TD><TD></TD></TR>
+      <TR><TD ALIGN="LEFT">RoastLevel</TD><TD ALIGN="LEFT">roastLevel</TD><TD>enum</TD></TR>
+      <TR><TD ALIGN="LEFT">ProcessingMethod</TD><TD ALIGN="LEFT">processingMethod</TD><TD>enum</TD></TR>
+      <TR><TD ALIGN="LEFT">String</TD><TD ALIGN="LEFT">roasterName</TD><TD></TD></TR>
+      <TR><TD ALIGN="LEFT">LocalDate</TD><TD ALIGN="LEFT">roastDate</TD><TD></TD></TR>
+      <TR><TD ALIGN="LEFT">Double</TD><TD ALIGN="LEFT">price</TD><TD></TD></TR>
+      <TR><TD ALIGN="LEFT">Integer</TD><TD ALIGN="LEFT">altitude</TD><TD></TD></TR>
+      <TR><TD ALIGN="LEFT">String</TD><TD ALIGN="LEFT">tastingNotes</TD><TD></TD></TR>
+      <TR><TD ALIGN="LEFT">boolean</TD><TD ALIGN="LEFT">favorite</TD><TD></TD></TR>
+      <TR><TD ALIGN="LEFT">Integer</TD><TD ALIGN="LEFT">weightGrams</TD><TD></TD></TR>
+      <TR><TD ALIGN="LEFT">boolean</TD><TD ALIGN="LEFT">finished</TD><TD></TD></TR>
+      <TR><TD ALIGN="LEFT">String</TD><TD ALIGN="LEFT">photoUrl</TD><TD></TD></TR>
+      <TR><TD ALIGN="LEFT">Long</TD><TD ALIGN="LEFT">user_id</TD><TD>FK</TD></TR>
+    </TABLE>>];
+
+  FlavorNote [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" COLOR="#37474f">
+      <TR><TD BGCOLOR="#cfd8dc" COLSPAN="3"><B>FlavorNote</B></TD></TR>
+      <TR><TD ALIGN="LEFT">Long</TD><TD ALIGN="LEFT">id</TD><TD>PK</TD></TR>
+      <TR><TD ALIGN="LEFT">String</TD><TD ALIGN="LEFT">name</TD><TD></TD></TR>
+      <TR><TD ALIGN="LEFT">Category</TD><TD ALIGN="LEFT">category</TD><TD>enum</TD></TR>
+      <TR><TD ALIGN="LEFT">Long</TD><TD ALIGN="LEFT">user_id</TD><TD>FK</TD></TR>
+    </TABLE>>];
+
+  BrewEntry [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" COLOR="#37474f">
+      <TR><TD BGCOLOR="#cfd8dc" COLSPAN="3"><B>BrewEntry</B></TD></TR>
+      <TR><TD ALIGN="LEFT">Long</TD><TD ALIGN="LEFT">id</TD><TD>PK</TD></TR>
+      <TR><TD ALIGN="LEFT">Method</TD><TD ALIGN="LEFT">method</TD><TD>enum</TD></TR>
+      <TR><TD ALIGN="LEFT">Double</TD><TD ALIGN="LEFT">grindSize</TD><TD></TD></TR>
+      <TR><TD ALIGN="LEFT">Double</TD><TD ALIGN="LEFT">waterTempC</TD><TD></TD></TR>
+      <TR><TD ALIGN="LEFT">Double</TD><TD ALIGN="LEFT">rating</TD><TD></TD></TR>
+      <TR><TD ALIGN="LEFT">LocalDateTime</TD><TD ALIGN="LEFT">brewedAt</TD><TD></TD></TR>
+      <TR><TD ALIGN="LEFT">Double</TD><TD ALIGN="LEFT">brewTimeSeconds</TD><TD></TD></TR>
+      <TR><TD ALIGN="LEFT">Double</TD><TD ALIGN="LEFT">doseGrams</TD><TD></TD></TR>
+      <TR><TD ALIGN="LEFT">Double</TD><TD ALIGN="LEFT">waterGrams</TD><TD></TD></TR>
+      <TR><TD ALIGN="LEFT">Double</TD><TD ALIGN="LEFT">yieldGrams</TD><TD></TD></TR>
+      <TR><TD ALIGN="LEFT">String</TD><TD ALIGN="LEFT">notes</TD><TD></TD></TR>
+      <TR><TD ALIGN="LEFT">Long</TD><TD ALIGN="LEFT">bean_id</TD><TD>FK</TD></TR>
+      <TR><TD ALIGN="LEFT">Long</TD><TD ALIGN="LEFT">user_id</TD><TD>FK</TD></TR>
+    </TABLE>>];
+
+  CafeLocation [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" COLOR="#37474f">
+      <TR><TD BGCOLOR="#cfd8dc" COLSPAN="3"><B>CafeLocation</B></TD></TR>
+      <TR><TD ALIGN="LEFT">Long</TD><TD ALIGN="LEFT">id</TD><TD>PK</TD></TR>
+      <TR><TD ALIGN="LEFT">String</TD><TD ALIGN="LEFT">name</TD><TD></TD></TR>
+      <TR><TD ALIGN="LEFT">String</TD><TD ALIGN="LEFT">city</TD><TD></TD></TR>
+      <TR><TD ALIGN="LEFT">String</TD><TD ALIGN="LEFT">address</TD><TD></TD></TR>
+      <TR><TD ALIGN="LEFT">Double</TD><TD ALIGN="LEFT">rating</TD><TD></TD></TR>
+      <TR><TD ALIGN="LEFT">String</TD><TD ALIGN="LEFT">instagram</TD><TD></TD></TR>
+      <TR><TD ALIGN="LEFT">Double</TD><TD ALIGN="LEFT">latitude</TD><TD></TD></TR>
+      <TR><TD ALIGN="LEFT">Double</TD><TD ALIGN="LEFT">longitude</TD><TD></TD></TR>
+      <TR><TD ALIGN="LEFT">Long</TD><TD ALIGN="LEFT">user_id</TD><TD>FK</TD></TR>
+    </TABLE>>];
+
+  Report [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" COLOR="#37474f">
+      <TR><TD BGCOLOR="#cfd8dc" COLSPAN="3"><B>Report</B></TD></TR>
+      <TR><TD ALIGN="LEFT">Long</TD><TD ALIGN="LEFT">id</TD><TD>PK</TD></TR>
+      <TR><TD ALIGN="LEFT">PeriodType</TD><TD ALIGN="LEFT">periodType</TD><TD>enum</TD></TR>
+      <TR><TD ALIGN="LEFT">LocalDate</TD><TD ALIGN="LEFT">periodStart</TD><TD></TD></TR>
+      <TR><TD ALIGN="LEFT">LocalDate</TD><TD ALIGN="LEFT">periodEnd</TD><TD></TD></TR>
+      <TR><TD ALIGN="LEFT">LocalDateTime</TD><TD ALIGN="LEFT">generatedAt</TD><TD></TD></TR>
+      <TR><TD ALIGN="LEFT">ReportSource</TD><TD ALIGN="LEFT">source</TD><TD>enum</TD></TR>
+      <TR><TD ALIGN="LEFT">int</TD><TD ALIGN="LEFT">brewCount</TD><TD></TD></TR>
+      <TR><TD ALIGN="LEFT">Double</TD><TD ALIGN="LEFT">averageRating</TD><TD></TD></TR>
+      <TR><TD ALIGN="LEFT">String</TD><TD ALIGN="LEFT">topBeanName</TD><TD></TD></TR>
+      <TR><TD ALIGN="LEFT">Method</TD><TD ALIGN="LEFT">mostUsedMethod</TD><TD>enum</TD></TR>
+      <TR><TD ALIGN="LEFT">Double</TD><TD ALIGN="LEFT">totalDoseGrams</TD><TD></TD></TR>
+      <TR><TD ALIGN="LEFT">List</TD><TD ALIGN="LEFT">brewsPerDay</TD><TD>CLOB</TD></TR>
+      <TR><TD ALIGN="LEFT">List</TD><TD ALIGN="LEFT">methodBreakdown</TD><TD>CLOB</TD></TR>
+      <TR><TD ALIGN="LEFT">List</TD><TD ALIGN="LEFT">ratingTrend</TD><TD>CLOB</TD></TR>
+      <TR><TD ALIGN="LEFT">Long</TD><TD ALIGN="LEFT">user_id</TD><TD>FK</TD></TR>
+    </TABLE>>];
+
+  LEGENDA [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" COLOR="#37474f">
+      <TR><TD BGCOLOR="#cfd8dc" COLSPAN="2"><B>Legenda</B></TD></TR>
+      <TR><TD ALIGN="LEFT">PK</TD><TD ALIGN="LEFT">primarni ključ</TD></TR>
+      <TR><TD ALIGN="LEFT">FK</TD><TD ALIGN="LEFT">strani ključ</TD></TR>
+      <TR><TD ALIGN="LEFT">1:N</TD><TD ALIGN="LEFT">jedan-prema-više</TD></TR>
+      <TR><TD ALIGN="LEFT">M:N</TD><TD ALIGN="LEFT">više-prema-više (spojna tablica coffee_bean_flavor_note)</TD></TR>
+      <TR><TD ALIGN="LEFT">enum</TD><TD ALIGN="LEFT">nabrojani tip (@Enumerated)</TD></TR>
+      <TR><TD ALIGN="LEFT">CLOB</TD><TD ALIGN="LEFT">serijalizirana lista (@Convert)</TD></TR>
+    </TABLE>>];
+
+  // ---------- VEZE (1 = tee, N/M = crow) ----------
+  User -> CoffeeBean   [arrowtail=tee, arrowhead=crow, label="1:N"];
+  User -> FlavorNote   [arrowtail=tee, arrowhead=crow, label="1:N"];
+  User -> BrewEntry    [arrowtail=tee, arrowhead=crow, label="1:N"];
+  User -> CafeLocation [arrowtail=tee, arrowhead=crow, label="1:N"];
+  User -> Report       [arrowtail=tee, arrowhead=crow, label="1:N"];
+  CoffeeBean -> BrewEntry [arrowtail=tee, arrowhead=crow, label="1:N"];
+  CoffeeBean -> FlavorNote [arrowtail=crow, arrowhead=crow, label="M:N"];
+
+  // ---------- RUČNI RASPORED (rank grupe) ----------
+  { rank=min;  User; }
+  { rank=same; CoffeeBean; FlavorNote; }
+  { rank=same; Report; CafeLocation; BrewEntry; }
+  { rank=max;  LEGENDA; }
+
+  // nevidljiva veza: gurni legendu na dno
+  Report -> LEGENDA [style=invis];
+}

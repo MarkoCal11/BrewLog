@@ -1,0 +1,80 @@
+spring:
+  application:
+    name: brewlogapp
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            scope:
+              - email
+              - profile
+
+  servlet:
+    multipart:
+      max-file-size: 15MB
+      max-request-size: 15MB
+
+  jpa:
+    defer-datasource-initialization: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        auto_quote_keyword: true
+        format_sql: true
+        jdbc:
+          batch_size: 30
+          default_batch_fetch_size: 16
+    open-in-view: false
+    show-sql: false
+
+
+  datasource:
+    url: jdbc:h2:file:./data/brewlogdb;MODE=PostgreSQL
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+      connection-timeout: 30000
+      idle-timeout: 600000
+
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema.sql
+
+logging:
+  level:
+    org.springframework.jdbc.core.JdbcTemplate: DEBUG
+    org.springframework.jdbc.core.StatementCreatorUtils: TRACE
+    org.springframework.jdbc.core.simple.JdbcClient: DEBUG
+
+server:
+  port: 8080
+  address: 0.0.0.0   # bind all interfaces so devices on the LAN (e.g. Capacitor app at 172.20.10.10) can reach it
+  tomcat:
+    # Drain (swallow) the full body of a rejected oversized upload instead of resetting the
+    # connection at the 2MB default — otherwise the 413 error response never reaches the client
+    # and the server logs a "Broken pipe" instead. -1 = no limit.
+    max-swallow-size: -1
+
+jwt:
+  base64-secret: dGhpcyBpcyBhIHZlcnkgc2VjcmV0IGtleSBmb3Igand0
+  cookie-secure: false
+  cookie-same-site: Strict
+
+app:
+  upload-dir: ./uploads
+  frontend-url: http://localhost:5173

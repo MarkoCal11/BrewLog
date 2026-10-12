@@ -1,0 +1,710 @@
+/* ============================================================================
+   BrewLog — "Daybreak" theme
+   Drop-in reskin for the existing token-driven CSS. No structural JSX changes
+   required: it overrides the design tokens in index.css and tailors each
+   screen through the shared class vocabulary already in App.css.
+
+   INSTALL
+   1. Copy this file to  src/daybreak-theme.css
+   2. In  src/main.tsx, import it AFTER index.css (and App.css if global):
+
+          import './index.css'
+          import './daybreak-theme.css'
+
+   Optional copy polish for the home header lives in the patched
+   HomeComponent.tsx (see chat) — drop it in if you want the dateline +
+   data-driven subtitle.
+   ============================================================================ */
+
+@import url("https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Hanken+Grotesk:wght@400;500;600;700&display=swap");
+
+/* ============================================================================
+   1 · TOKENS
+   ============================================================================ */
+
+/* ---- Light: warm paper, espresso ink ------------------------------------ */
+:root {
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --surface-2: #f6efe4;
+  --surface-translucent: rgba(255, 255, 255, 0.85);
+  --text: #2b211a;
+  --text-secondary: #7a6a5b;
+  --text-tertiary: #9b8a78;
+  --border: #ece1cf;
+  --border-strong: #e1d3bd;
+
+  --accent: #8a4b2f;
+  --accent-hover: #743d26;
+  --accent-soft: rgba(138, 75, 47, 0.10);
+  --on-accent: #fdf8f1;
+
+  --star: #d99a3c;
+
+  --hero-gradient: linear-gradient(140deg, #3a2519 0%, #23150c 100%);
+
+  --shadow-sm: 0 1px 2px rgba(50, 30, 15, 0.05);
+  --shadow-md: 0 16px 40px rgba(50, 30, 15, 0.18);
+
+  --radius-sm: 10px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+
+  --sans: 'Hanken Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --serif: 'Newsreader', Georgia, 'Times New Roman', serif;
+
+  font-family: var(--sans);
+}
+
+/* ---- Warm "lamplight" dark ---------------------------------------------- */
+[data-theme="dark"] {
+  --bg: #17110d;
+  --surface: #211913;
+  --surface-2: #2a201a;
+  --surface-translucent: rgba(23, 17, 13, 0.82);
+  --text: #f5ece1;
+  --text-secondary: #b39d8a;
+  --text-tertiary: #8a7c6c;
+  --border: #2f241c;
+  --border-strong: #3a2d23;
+
+  --accent: #d99a3c;
+  --accent-hover: #e7ab50;
+  --accent-soft: rgba(217, 154, 60, 0.14);
+  --on-accent: #17110d;
+
+  --star: #e7ab50;
+
+  --hero-gradient: linear-gradient(140deg, #2c1f15 0%, #1c130d 100%);
+}
+
+/* ============================================================================
+   2 · EDITORIAL VOICE  (shared across every screen)
+   Serif display only on the "voice" elements; body + labels stay grotesk.
+   ============================================================================ */
+
+.page-title,
+.auth-title,
+.card-strong,
+.stat-value,
+.list-item-title,
+.detail-value {
+  font-family: var(--serif);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.page-title {
+  letter-spacing: -0.02em;
+}
+
+/* Italic serif wordmark, top-left */
+.app-nav-brand {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 22px;
+}
+
+/* Eyebrow → a quiet dateline / brand kicker */
+.page-eyebrow {
+  letter-spacing: 0.14em;
+}
+
+/* Empty + error states read as handwritten margin notes, not error chrome */
+.empty,
+.error {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 17px;
+}
+
+/* Card + list surfaces: hairline borders instead of heavy shadow */
+.card,
+.list,
+.detail-list,
+.stat-card,
+.table-wrap {
+  border: 1px solid var(--border);
+}
+
+/* ============================================================================
+   3 · HOME DASHBOARD
+   ============================================================================ */
+
+/* ---- Unified stat strip --------------------------------------------------
+   Scoped with :has(.stat) so it only affects the home tiles, never the
+   Analytics grid (which uses .stat-card). One ruled bar, big serif numerals
+   above quiet caps labels. */
+.stat-grid:has(.stat) {
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.stat-grid:has(.stat) .stat {
+  background: transparent;
+  border: none;
+  border-right: 1px solid var(--border);
+  border-radius: 0;
+  padding: 22px 24px;
+}
+
+.stat-grid:has(.stat) .stat:last-child {
+  border-right: none;
+}
+
+.stat-grid:has(.stat) .stat-value {
+  font-size: 40px;
+  line-height: 1;
+}
+
+.stat-grid:has(.stat) .stat-label {
+  margin-top: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+@media (max-width: 767px) {
+  .stat-grid:has(.stat) {
+    grid-template-columns: 1fr 1fr;
+  }
+  .stat-grid:has(.stat) .stat:nth-child(2n) {
+    border-right: none;
+  }
+  .stat-grid:has(.stat) .stat:nth-child(-n + 2) {
+    border-bottom: 1px solid var(--border);
+  }
+}
+
+/* ---- Featured row: top-rated bean beside method / flavors ---------------- */
+.home-feature {
+  display: grid;
+  grid-template-columns: 1.55fr 1fr;
+  gap: 16px;
+  align-items: stretch;
+}
+
+@media (max-width: 767px) {
+  .home-feature {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Top-rated bean hero: photo block + body, flavor pills, warm gradient */
+.hero-card.hero-bean {
+  padding: 0;
+  display: flex;
+  overflow: hidden;
+}
+
+.hero-bean-photo {
+  width: 180px;
+  flex-shrink: 0;
+  align-self: stretch;
+  object-fit: cover;
+  /* Striped placeholder when the bean has no photo */
+  background: repeating-linear-gradient(45deg, #4a3525, #4a3525 11px, #52402f 11px, #52402f 22px);
+}
+
+.hero-bean-body {
+  padding: 24px 26px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.hero-bean-body .card-meta {
+  margin-top: 10px;
+}
+
+.hero-bean-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 14px;
+}
+
+.hero-bean-chips .chip {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fbf2e6;
+}
+
+@media (max-width: 767px) {
+  .hero-card.hero-bean {
+    flex-direction: column;
+  }
+
+  .hero-bean-photo {
+    width: 100%;
+    height: 160px;
+    align-self: auto;
+    flex-shrink: 0;
+  }
+}
+
+/* Right-hand method + flavors card */
+.home-side .card-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 18px 0;
+}
+
+/* Top-rated bean hero keeps the warm gradient (via --hero-gradient) */
+.hero-card .card-strong {
+  font-family: var(--serif);
+  font-size: 30px;
+}
+
+.hero-card .card-title {
+  letter-spacing: 0.14em;
+}
+
+/* ---- Recent brews as a logbook register ---------------------------------
+   Open ruled rows instead of a card: left date column, serif bean name,
+   muted method, right-aligned serif score. Scoped classes so the Beans /
+   Brews / Cafés lists keep their own card styling. */
+.register-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.register-all {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+/* Quick actions: one solid CTA, the rest read as quiet ink links */
+.home-actions .btn-ghost {
+  border: 1px solid var(--border-strong);
+  background: transparent;
+  color: var(--text-secondary);
+}
+
+.home-actions .btn-ghost:hover:not(:disabled) {
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+/* Report banner: lower-key than the boxed alert */
+.report-banner {
+  background: var(--surface);
+  border-color: var(--border-strong);
+}
+
+/* ============================================================================
+   4 · LIST SCREENS  (Beans · Brews · Cafés · Flavors)
+   ============================================================================ */
+
+.page-subtitle {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 17px;
+  color: var(--text-secondary);
+}
+
+/* "12 of 23 beans" — small italic serif tally */
+.list-count {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--text-tertiary);
+}
+
+.list-item-title {
+  font-size: 18px;
+}
+
+/* Section labels: warm letterspaced caps */
+.section-title {
+  letter-spacing: 0.12em;
+  color: var(--text-tertiary);
+}
+
+/* ============================================================================
+   5 · ANALYTICS  (StatsView)
+   Charts already read --accent / --border / --surface tokens, so they
+   re-skin automatically. These rules tailor the numerals + tables.
+   ============================================================================ */
+
+.stat-card .stat-value {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 32px;
+  line-height: 1;
+}
+
+.stat-card .stat-label {
+  margin-top: 8px;
+  letter-spacing: 0.05em;
+}
+
+/* Big ratio / cost numerals */
+.ratio-row .card-strong {
+  font-size: 28px;
+}
+
+/* Stat tables: serif row labels, quiet ruled rows */
+.stat-table td:first-child {
+  font-family: var(--serif);
+  font-size: 15.5px;
+  font-weight: 500;
+}
+
+.stat-table th {
+  letter-spacing: 0.08em;
+  color: var(--text-tertiary);
+}
+
+/* ============================================================================
+   6 · DETAIL SCREENS  (Bean · Brew · Café · Report · Flavor)
+   ============================================================================ */
+
+.detail-value {
+  font-size: 16px;
+}
+
+.detail-label {
+  color: var(--text-secondary);
+}
+
+.bean-photo,
+.bean-photo-placeholder {
+  border-radius: var(--radius-lg);
+  background: var(--surface-2);
+}
+
+/* ============================================================================
+   7 · AUTH  (Login · Register)
+   ============================================================================ */
+
+.auth-title {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 46px;
+  letter-spacing: -0.01em;
+  color: var(--accent);
+}
+
+.auth-subtitle {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 17px;
+}
+
+/* ============================================================================
+   8 · LIST SCREENS as open ruled rows  (Beans · Brews · Cafés · Flavors)
+   App.css turns .list into a grid of bordered cards on desktop — the same
+   "little boxes" we removed from the home dashboard. Override it so every
+   list reads as one open, ruled register: hairline row dividers, no card
+   chrome, serif titles (inherited from section 2). The rows keep all their
+   controls (favorite star, thumbnail, badges, delete).
+   ============================================================================ */
+
+/* ul.list raises specificity above App.css's later-loaded `.list` grid rules,
+   so the ruled single column wins regardless of stylesheet import order. */
+ul.list {
+  background: transparent;
+  box-shadow: none;
+  border: none;
+  border-radius: 0;
+  overflow: visible;
+}
+
+.list-item {
+  background: transparent;
+  border: none;
+  border-top: 1px solid var(--border);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.list-item:first-child {
+  border-top: none;
+}
+
+/* Cancel App.css's desktop grid-of-cards; keep the single ruled column */
+@media (min-width: 768px) {
+  ul.list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    background: transparent;
+    box-shadow: none;
+    border-radius: 0;
+  }
+  ul.list .list-item {
+    border: none;
+    border-top: 1px solid var(--border);
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+  ul.list .list-item:first-child {
+    border-top: none;
+  }
+}
+
+/* Bigger, calmer hit area now that rows aren't crammed into cards */
+.list-item {
+  padding: 16px 6px;
+}
+
+/* ul.list … keeps this above the ul.list .list-item base reset (which would
+   otherwise win the cascade and swallow the hover highlight on desktop). */
+ul.list .list-item-clickable:hover {
+  background: var(--surface-2);
+}
+
+/* ============================================================================
+   9 · DETAIL PAGES  (Bean · Brew · Café) — "spec sheet + journal"
+   Shared two-column pattern: a figure/hero column, then a body grid with the
+   editorial prose on the left and a ruled spec sheet on the right.
+   ============================================================================ */
+
+/* Hero: figure (photo / map / metric) beside the headline block */
+.detail-hero {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+.detail-eyebrow {
+  color: var(--accent);
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.detail-sub {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 18px;
+  color: var(--text-secondary);
+  margin-top: 6px;
+}
+
+.detail-rating {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.detail-rating-big {
+  font-family: var(--serif);
+  font-size: 38px;
+  line-height: 1;
+  color: var(--text);
+}
+
+.detail-rating-big b {
+  color: var(--star);
+  font-weight: 500;
+}
+
+.detail-rating-meta {
+  color: var(--text-secondary);
+  font-size: 15px;
+}
+
+/* Body: editorial column + sidebar */
+.detail-body-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+.detail-main,
+.detail-side {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Tasting / brew notes as serif prose */
+.detail-prose {
+  font-family: var(--serif);
+  font-size: 19px;
+  line-height: 1.55;
+  color: #41362a;
+}
+
+/* Ruled spec sheet with dot leaders */
+.spec-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.spec {
+  display: flex;
+  align-items: baseline;
+  padding: 11px 2px;
+  border-bottom: 1px solid var(--border);
+}
+
+.spec:last-child {
+  border-bottom: none;
+}
+
+.spec-k {
+  color: var(--text-secondary);
+  font-size: 14.5px;
+}
+
+.spec-lead {
+  flex: 1;
+  border-bottom: 1px dotted #cbb99f;
+  margin: 0 8px 5px;
+}
+
+.spec-v {
+  font-family: var(--serif);
+  font-size: 16px;
+  text-align: right;
+}
+
+.detail-figure-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+/* Full-width rule under the hero, sitting beneath the photo buttons */
+.detail-hero {
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Detail-page buttons read as squared-off outlined chips (Change photo · Remove · Edit · Delete) */
+.detail-figure-actions .btn,
+.detail-rating .btn-ghost,
+.detail-side .row-between .btn-ghost,
+.detail-actions .btn {
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+  padding: 7px 16px;
+  font-weight: 500;
+}
+
+.detail-figure-actions .btn:hover:not(:disabled),
+.detail-rating .btn-ghost:hover:not(:disabled),
+.detail-side .row-between .btn-ghost:hover:not(:disabled),
+.detail-actions .btn-ghost:hover:not(:disabled) {
+  background: var(--surface-2);
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+/* Delete keeps its red ink but takes the outlined chip shape */
+.detail-actions .btn-danger {
+  color: var(--danger);
+  border-color: color-mix(in srgb, var(--danger) 45%, var(--border-strong));
+}
+
+.detail-actions .btn-danger:hover:not(:disabled) {
+  background: var(--danger-soft);
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+/* Café map as the figure anchor */
+.detail-hero .cafe-map {
+  height: 100%;
+  min-height: 220px;
+}
+
+.detail-body-grid .cafe-map {
+  min-height: 340px;
+  height: 100%;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+/* Brew detail: rating / ratio scorecard in the figure column */
+.brew-scorecard {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+  padding: 26px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-align: center;
+}
+
+.brew-score-big {
+  font-family: var(--serif);
+  font-size: 46px;
+  line-height: 1;
+  color: var(--star);
+  font-weight: 500;
+}
+
+.brew-score-ratio {
+  font-family: var(--serif);
+  font-size: 34px;
+  line-height: 1;
+  color: var(--text);
+  margin-top: 20px;
+}
+
+.brew-score-cap {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-tertiary);
+  font-weight: 600;
+}
+
+/* Register delete button */
+.brew-del {
+  justify-self: end;
+  background: transparent;
+  border: none;
+  color: var(--danger, #c0392b);
+  font-size: 13px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.brew-del:hover {
+  background: rgba(192, 57, 43, 0.08);
+}
+
+@media (max-width: 767px) {
+  .detail-hero,
+  .detail-body-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .detail-figure {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .detail-figure .bean-photo,
+  .detail-figure .bean-photo-placeholder {
+    max-width: 240px;
+    width: 100%;
+  }
+
+  .detail-figure-actions {
+    justify-content: center;
+  }
+}

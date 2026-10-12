@@ -1,0 +1,8 @@
+flowchart TD
+    A([Start: izvještaj za korisnika i razdoblje]) --> B[Dohvati zapise kuhanja u razdoblju]
+    B --> C{Ima li zapisa?}
+    C -- Ne --> D[Obriši izvještaj ako postoji]
+    C -- Da --> E[Izračunaj pokazatelje]
+    E --> F[Stvori ili ažuriraj izvještaj i spremi]
+    D --> G([Kraj])
+    F --> G

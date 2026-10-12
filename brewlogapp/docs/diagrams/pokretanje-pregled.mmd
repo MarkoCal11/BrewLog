@@ -1,0 +1,35 @@
+flowchart TD
+    subgraph T1[Redovito generiranje - Quartz]
+        Q[Cron okine posao: pon 00:05 / 1. u mj. 00:10] --> QP[generatePrevious - createIfMissing = true]
+    end
+
+    subgraph T2[Naknadna izrada - pokretanje aplikacije]
+        S[ApplicationReadyEvent] --> SB[backfillMissing - hod unatrag do najstarijeg zapisa]
+        SB --> SC{Izvještaj već postoji?}
+        SC -- Da --> SD[Preskoči]
+        SC -- Ne --> SE[reconcile - createIfMissing = true]
+    end
+
+    subgraph T3[Usklađivanje pri izmjeni zapisa - bez SSE obavijesti]
+        E[Dodavanje / izmjena / brisanje zapisa] --> ER[reconcileReports - pogođena razdoblja]
+        ER --> EC{Razdoblje dovršeno?}
+        EC -- Da --> ED[reconcile - createIfMissing = true]
+        EC -- Ne --> EF[reconcile - createIfMissing = false]
+    end
+
+    QP --> R[[reconcile - vidi detaljni dijagram]]
+    SE --> R
+    ED --> R
+    EF --> R
+
+    QP -. obavijest .-> N
+    SE -. obavijest samo za najnovije razdoblje .-> N
+    N[publishAfterCommit] --> NC{Aktivna transakcija?}
+    NC -- Da --> NA[Pošalji SSE obavijest nakon commita]
+    NC -- Ne --> NB[Pošalji SSE obavijest odmah]
+
+    subgraph LEG[Legenda]
+        direction LR
+        LA[korak] ==> LB[glavni tok postupka]
+        LC[korak] -. obavijest korisniku SSE .-> LD[krajnja dostava]
+    end
