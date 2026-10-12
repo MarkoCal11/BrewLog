@@ -7,17 +7,17 @@ brewlogapp-frontend/dist/
 brewlogapp-frontend/build/
 
 # Spring Boot / Java
-brewlogapp/target/
-brewlogapp/build/
+brewlogapp-backend/target/
+brewlogapp-backend/build/
 
 # Local database files
-brewlogapp/data/*.mv.db
-brewlogapp/data/*.trace.db
-brewlogapp/data/*.lock.db
-brewlogapp/data/.DS_Store
+brewlogapp-backend/data/*.mv.db
+brewlogapp-backend/data/*.trace.db
+brewlogapp-backend/data/*.lock.db
+brewlogapp-backend/data/.DS_Store
 
 # User uploads
-brewlogapp/uploads/
+brewlogapp-backend/uploads/
 
 # Local environment files
 .env
