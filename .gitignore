@@ -1,7 +1,7 @@
 # macOS
 .DS_Store
 
-# React
+# React frontend
 brewlogapp-frontend/node_modules/
 brewlogapp-frontend/dist/
 brewlogapp-frontend/build/
@@ -14,11 +14,17 @@ brewlogapp/build/
 brewlogapp/data/*.mv.db
 brewlogapp/data/*.trace.db
 brewlogapp/data/*.lock.db
+brewlogapp/data/.DS_Store
 
-# Runtime uploads
+# User uploads
 brewlogapp/uploads/
 
 # Local environment files
 .env
 .env.*
 !.env.example
+
+# IDE files
+.idea/
+*.iml
+.vscode/
