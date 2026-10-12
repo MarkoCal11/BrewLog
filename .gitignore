@@ -1,0 +1,24 @@
+# macOS
+.DS_Store
+
+# React
+brewlogapp-frontend/node_modules/
+brewlogapp-frontend/dist/
+brewlogapp-frontend/build/
+
+# Spring Boot / Java
+brewlogapp/target/
+brewlogapp/build/
+
+# Local database files
+brewlogapp/data/*.mv.db
+brewlogapp/data/*.trace.db
+brewlogapp/data/*.lock.db
+
+# Runtime uploads
+brewlogapp/uploads/
+
+# Local environment files
+.env
+.env.*
+!.env.example
