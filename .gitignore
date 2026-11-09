@@ -28,3 +28,4 @@ brewlogapp-backend/uploads/
 .idea/
 *.iml
 .vscode/
+.claude/
