@@ -22,7 +22,6 @@ spring:
       max-request-size: 15MB
 
   jpa:
-    defer-datasource-initialization: false
     hibernate:
       ddl-auto: validate
     properties:
@@ -35,7 +34,6 @@ spring:
     open-in-view: false
     show-sql: false
 
-
   datasource:
     url: jdbc:h2:file:./data/brewlogdb;MODE=PostgreSQL
     driver-class-name: org.h2.Driver
@@ -47,17 +45,14 @@ spring:
       connection-timeout: 30000
       idle-timeout: 600000
 
-
   h2:
     console:
       enabled: true
       path: /h2-console
 
-  sql:
-    init:
-      mode: always
-      schema-locations: classpath:schema.sql
-
+  flyway:
+    baseline-on-migrate: true
+    baseline-version: 1
 
 server:
   port: 8080
@@ -71,5 +66,9 @@ jwt:
   cookie-same-site: Strict
 
 app:
-  upload-dir: ./uploads
-  frontend-url: http://localhost:5173
+  upload-dir: ${UPLOAD_DIR:./uploads}
+  frontend-url: ${FRONTEND_URL:http://localhost:5173}
+  admin:
+    username: admin
+    email: admin@brewlog.com
+    password: ${ADMIN_PASSWORD:}

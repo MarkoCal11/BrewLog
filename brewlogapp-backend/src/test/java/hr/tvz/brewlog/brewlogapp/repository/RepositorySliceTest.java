@@ -12,13 +12,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-/**
- * Shared setup for repository slice tests. Bundles {@link DataJpaTest} with the H2 properties this
- * project's repositories need, and pulls in {@link JacksonAutoConfiguration} so the JSON
- * {@code AttributeConverter} beans (which require a Jackson {@code ObjectMapper}) can be constructed
- * — {@code @DataJpaTest} alone does not load the Jackson auto-configuration, which otherwise fails
- * EntityManagerFactory creation for the whole slice.
- */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
@@ -28,6 +21,7 @@ import java.lang.annotation.Target;
 @TestPropertySource(properties = {
         "spring.jpa.hibernate.ddl-auto=create-drop",
         "spring.sql.init.mode=never",
+        "spring.flyway.enabled=false",
         "spring.jpa.properties.hibernate.auto_quote_keyword=true"
 })
 public @interface RepositorySliceTest {
