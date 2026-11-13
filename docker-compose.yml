@@ -1,0 +1,50 @@
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: brewlog
+      POSTGRES_USER: brewlog
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-brewlog}
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U brewlog -d brewlog"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  backend:
+    build: ./brewlogapp-backend
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      DB_URL: jdbc:postgresql://db:5432/brewlog
+      DB_USERNAME: brewlog
+      DB_PASSWORD: ${DB_PASSWORD:-brewlog}
+      JWT_SECRET: ${JWT_SECRET:?postavi JWT_SECRET u .env}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-not-set}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-not-set}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
+      FRONTEND_URL: http://localhost:3000
+      UPLOAD_DIR: /app/uploads
+      COOKIE_SECURE: "false"
+    volumes:
+      - uploads:/app/uploads
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build:
+      context: ./brewlogapp-frontend
+      args:
+        VITE_API_URL: http://localhost:8080
+    depends_on:
+      - backend
+    ports:
+      - "3000:80"
+
+volumes:
+  db-data:
+  uploads:
