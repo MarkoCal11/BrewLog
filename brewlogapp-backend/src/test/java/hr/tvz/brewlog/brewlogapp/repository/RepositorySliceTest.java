@@ -18,6 +18,7 @@ import java.lang.annotation.Target;
 @Inherited
 @DataJpaTest
 @ImportAutoConfiguration(JacksonAutoConfiguration.class)
+// @DataJpaTest + Jackson auto-config: the JSON column converters need an ObjectMapper.
 @TestPropertySource(properties = {
         "spring.jpa.hibernate.ddl-auto=create-drop",
         "spring.sql.init.mode=never",

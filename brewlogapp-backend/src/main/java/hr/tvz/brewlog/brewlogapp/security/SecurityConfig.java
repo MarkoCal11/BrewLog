@@ -38,8 +38,10 @@ public class SecurityConfig {
             .cors(Customizer.withDefaults())
             .csrf(AbstractHttpConfigurer::disable)
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
+                // OAuth2 login needs a session only for the state param; auth is never stored in it (JWT only).
             .securityContext(ctx -> ctx.securityContextRepository(new NullSecurityContextRepository()))
                 .authorizeHttpRequests(auth -> {
+                    // JWT filter skips ERROR dispatches, so securing /error would turn every 400/403/500 into 401.
                     auth.dispatcherTypeMatchers(DispatcherType.ERROR, DispatcherType.ASYNC).permitAll();
                     if (h2ConsoleEnabled) {
                         auth.requestMatchers("/h2-console/**").permitAll();

@@ -15,6 +15,10 @@ import java.util.regex.Pattern;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * Regression test: errors were clobbered into 401 by the /error dispatch.
+ * Needs a real server (RANDOM_PORT) because MockMvc skips the container error dispatch.
+ */
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
         properties = {
