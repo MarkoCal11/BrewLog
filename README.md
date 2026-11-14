@@ -1,6 +1,6 @@
 # BrewLog
 
-[![CI](https://github.com/MarkoCal11/BrewLog/actions/workflows/ci.yml/badge.svg)](https://github.com/MarkoCal11/BrewLog/actions/workflows/ci.yml)
+[![CI](https://github.com/markocaleta/BrewLog/actions/workflows/ci.yml/badge.svg)](https://github.com/markocaleta/BrewLog/actions/workflows/ci.yml)
 
 BrewLog is a full-stack app for specialty coffee enthusiasts: log brewing sessions, manage coffee beans and
 flavor notes, find cafés on a map, and get automatic weekly and monthly reports on your brewing habits.
