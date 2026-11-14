@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  h2:
+    console:
+      enabled: false
+  flyway:
+    baseline-on-migrate: false
+
+jwt:
+  cookie-secure: ${COOKIE_SECURE:true}
