@@ -2,6 +2,9 @@ spring:
   application:
     name: brewlogapp
 
+  config:
+    import: optional:file:.env[.properties]
+
   security:
     oauth2:
       client:
@@ -55,23 +58,15 @@ spring:
       mode: always
       schema-locations: classpath:schema.sql
 
-logging:
-  level:
-    org.springframework.jdbc.core.JdbcTemplate: DEBUG
-    org.springframework.jdbc.core.StatementCreatorUtils: TRACE
-    org.springframework.jdbc.core.simple.JdbcClient: DEBUG
 
 server:
   port: 8080
-  address: 0.0.0.0   # bind all interfaces so devices on the LAN (e.g. Capacitor app at 172.20.10.10) can reach it
+  address: 0.0.0.0
   tomcat:
-    # Drain (swallow) the full body of a rejected oversized upload instead of resetting the
-    # connection at the 2MB default — otherwise the 413 error response never reaches the client
-    # and the server logs a "Broken pipe" instead. -1 = no limit.
     max-swallow-size: -1
 
 jwt:
-  base64-secret: dGhpcyBpcyBhIHZlcnkgc2VjcmV0IGtleSBmb3Igand0
+  base64-secret: ${JWT_SECRET}
   cookie-secure: false
   cookie-same-site: Strict
 
