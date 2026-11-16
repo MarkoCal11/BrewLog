@@ -2,6 +2,9 @@
 
 [![CI](https://github.com/markocaleta/BrewLog/actions/workflows/ci.yml/badge.svg)](https://github.com/markocaleta/BrewLog/actions/workflows/ci.yml)
 
+**Live demo:** https://brewlog.markocaleta.com
+Demo login: `demo` / `BrewLogDemo2026` - or sign in with Google.
+
 BrewLog is a full-stack app for specialty coffee enthusiasts: log brewing sessions, manage coffee beans and
 flavor notes, find cafés on a map, and get automatic weekly and monthly reports on your brewing habits.
 It runs as a web app and as an iOS app (Capacitor).
