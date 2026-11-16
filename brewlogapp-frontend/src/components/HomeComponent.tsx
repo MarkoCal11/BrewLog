@@ -6,6 +6,7 @@ import { resolvePhotoUrl } from '../api/config'
 import { formatProcessingMethod } from '../utils/beanFormat'
 import { formatCategory } from '../types/FlavorNote'
 import { formatPeriodLabel } from '../types/Report'
+import { plural } from '../utils/plural'
 import type { Report } from '../types/Report'
 
 function periodNoun(periodType: string): string {
@@ -83,7 +84,7 @@ export function HomeComponent() {
 
 
     const subtitle = stats.totalBrews > 0
-        ? `${stats.totalBrews} brews and ${stats.totalBeans} beans in your logbook so far.`
+        ? `${plural(stats.totalBrews, 'brew')} and ${plural(stats.totalBeans, 'bean')} in your logbook so far.`
         : 'Your coffee, from first pour onward.'
 
 

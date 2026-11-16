@@ -58,7 +58,8 @@ server:
   port: 8080
   address: 0.0.0.0 # reachable from the iOS app on the same Wi-Fi
   tomcat:
-    max-swallow-size: -1 # Read the whole oversized upload so the 413 reaches the client instead of a "Broken pipe".
+    # Read the whole oversized upload so the 413 reaches the client instead of a "Broken pipe".
+    max-swallow-size: -1
 
 jwt:
   base64-secret: ${JWT_SECRET}

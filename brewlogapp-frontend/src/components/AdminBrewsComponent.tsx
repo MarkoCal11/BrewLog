@@ -6,6 +6,7 @@ import { METHODS, formatMethod } from '../types/BrewEntry'
 import { filterSortBrews } from '../utils/listFilters'
 import type { BrewSort } from '../utils/listFilters'
 import { ListToolbar } from './ListToolbar'
+import { plural } from '../utils/plural'
 
 const formatTime = (seconds: number | null) => {
     if (seconds == null) return null
@@ -68,7 +69,7 @@ export function AdminBrewsComponent() {
             <Link to="/admin" className="back-link">Admin</Link>
             <header className="page-header">
                 <h1 className="page-title">All Brews</h1>
-                <p className="page-subtitle">{(data ?? []).length} brews across all users.</p>
+                <p className="page-subtitle">{plural((data ?? []).length, 'brew')} across all users.</p>
             </header>
 
             {(data ?? []).length === 0 ? (
@@ -117,7 +118,7 @@ export function AdminBrewsComponent() {
                         <div className="empty">No brews match your filters.</div>
                     ) : (
                         <>
-                            <div className="list-count">{visibleBrews.length} of {(data ?? []).length} brews</div>
+                            <div className="list-count">{visibleBrews.length} of {plural((data ?? []).length, 'brew')}</div>
                             <ul className="list">
                                 {visibleBrews.map(entry => {
                                     const ratio = formatRatio(entry)
