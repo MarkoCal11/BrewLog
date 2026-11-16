@@ -1,3 +1,6 @@
+# Iza Caddyja: koristi X-Forwarded-* zaglavlja (https, host) pri gradnji URL-ova
+server:
+  forward-headers-strategy: framework
 spring:
   datasource:
     url: ${DB_URL}
