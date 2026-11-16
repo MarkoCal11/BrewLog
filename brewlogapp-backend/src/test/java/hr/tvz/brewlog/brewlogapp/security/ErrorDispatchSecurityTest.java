@@ -16,21 +16,18 @@ import java.util.regex.Pattern;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Regression guard for the error-dispatch bug: every handled error (validation 400, access-denied
- * 403, any 500) was being clobbered into 401 because the servlet ERROR dispatch to /error ran back
- * through the security chain with no authentication (the OncePerRequestFilter JWT filter skips error
- * dispatches). Fix: SecurityConfig permits DispatcherType.ERROR/ASYNC.
- *
- * <p>Must run on a real server (RANDOM_PORT) — MockMvc does not replay the container error dispatch
- * through the filter chain, so the slice tests cannot catch this. Uses the JDK HttpClient because
- * Spring Boot 4 no longer ships TestRestTemplate.
+ * Regression test: errors were clobbered into 401 by the /error dispatch.
+ * Needs a real server (RANDOM_PORT) because MockMvc skips the container error dispatch.
  */
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
         properties = {
                 "spring.datasource.url=jdbc:h2:mem:errdispatch;MODE=PostgreSQL;DB_CLOSE_DELAY=-1",
                 "spring.quartz.auto-startup=false",
-                "app.upload-dir=target/brewlog-regtest-uploads"
+                "app.upload-dir=target/brewlog-regtest-uploads",
+                "jwt.base64-secret=dGVzdC1zZWNyZXQtdGVzdC1zZWNyZXQtdGVzdC1zZWNyZXQ=",
+                "spring.security.oauth2.client.registration.google.client-id=test",
+                "spring.security.oauth2.client.registration.google.client-secret=test"
         })
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ErrorDispatchSecurityTest {

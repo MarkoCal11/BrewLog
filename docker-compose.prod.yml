@@ -1,0 +1,35 @@
+services:
+  caddy:
+    image: caddy:2-alpine
+    environment:
+      DOMAIN: ${DOMAIN:?postavi DOMAIN u .env}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+    depends_on:
+      - backend
+      - frontend
+    restart: unless-stopped
+
+  db:
+    restart: unless-stopped
+
+  backend:
+    ports: !reset []
+    environment:
+      FRONTEND_URL: https://${DOMAIN}
+      COOKIE_SECURE: "true"
+    restart: unless-stopped
+
+  frontend:
+    ports: !reset []
+    build:
+      args:
+        VITE_API_URL: https://${DOMAIN}
+    restart: unless-stopped
+
+volumes:
+  caddy-data:

@@ -61,15 +61,12 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String accessToken = jwtTokenProvider.generateAccessToken(userDetails);
         RefreshTokenService.RefreshResult issued = refreshTokenService.issue(user, false);
 
-        // The OAuth2 session was only needed for the redirect dance (state parameter).
-        // Invalidate it now so it can't bleed into subsequent JWT-authenticated API calls.
         var session = request.getSession(false);
         if (session != null) {
+            // Session was only needed for the OAuth2 redirect; drop it so it can't leak into JWT requests.
             session.invalidate();
         }
 
-        // Set the refresh token as an httpOnly cookie — mirrors the regular login flow
-        // so the frontend refresh mechanism works identically after OAuth2 login.
         ResponseCookie refreshCookie = ResponseCookie.from(REFRESH_COOKIE, issued.rawToken())
                 .httpOnly(true)
                 .secure(cookieSecure)
@@ -79,7 +76,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                 .build();
         response.addHeader("Set-Cookie", refreshCookie.toString());
 
-        // Only the access token goes in the URL — refresh token is in the cookie.
+        // Only the short-lived access token goes in the URL; the refresh token is in an HttpOnly cookie.
         String redirect = UriComponentsBuilder.fromUriString(frontendUrl + "/oauth2/callback")
                 .queryParam("token", accessToken)
                 .toUriString();

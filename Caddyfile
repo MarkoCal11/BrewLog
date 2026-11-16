@@ -1,0 +1,5 @@
+{$DOMAIN} {
+    @backend path /api/* /oauth2/authorization/* /login/oauth2/* /uploads/*
+    reverse_proxy @backend backend:8080
+    reverse_proxy frontend:80
+}
